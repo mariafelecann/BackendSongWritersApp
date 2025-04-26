@@ -41,3 +41,16 @@ class SongCrudOperationsService:
             current_app.logger.error(e)
             return 500
 
+    def get_all_songs(self, email):
+        try:
+            db = get_db()
+            songs = db.query(Song).filter_by(email=email).all()
+            songs_list = [
+                {"title": song.title, "genre": song.genre, "lyrics": song.lyrics}
+                for song in songs
+            ]
+            return 200, songs_list
+        except Exception as e:
+            db.rollback()
+            current_app.logger.error(e)
+            return 500, {"Database error"}

@@ -1,9 +1,10 @@
 from sqlite3 import IntegrityError
 
+import jwt
 from flask import current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import update
-
+import datetime
 from database.database import get_db
 
 
@@ -32,30 +33,42 @@ class AuthenticationService:
             self.db.rollback()
             return  409
         except Exception as e:
+            print(e)
             self.db.rollback()
             return 500
 
     def login(self, email, password):
         try:
             if not email or not password:
-                return  400
+                return {"error": "Email and password are required"}, 400
             self.db = get_db()
             user = self.db.query(self.User).filter_by(email=email).first()
 
             if not user:
-                return 401
+                return {"error": "Invalid email"}, 401
 
             if not check_password_hash(user.password, password):
-                return 401
+                return {"error": "Invalid password"}, 401
 
             self.db.execute(update(self.User).where(self.User.email == email).values(logged_in=True))
             self.db.commit()
+            token = jwt.encode(
+                {
+                    "user_id": user.id,
+                    "exp": datetime.datetime.now() + datetime.timedelta(days=1),
+                },
+                current_app.config["SECRET_KEY"],
+                algorithm="HS256",
+            )
+
+            return {
+                "token": token,
+                "email": user.email
+            }, 200
         except Exception as e:
             self.db.rollback()
             current_app.logger.error(e)
-            return 500
-
-        return 200
+            return {"error": "Database error"}, 500
 
     def logout(self, email):
         try:

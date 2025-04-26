@@ -15,18 +15,9 @@ def login():
         email = data.get("email")
         password = data.get("password")
 
-        code = authentication_service.login(email, password)
-        if code == 200:
-            return jsonify({"message": "Login successful"}), 200
-        else:
-            if code == 401:
-                return jsonify({"error": "Invalid email or password"}), 401
-            else:
-                if code == 400:
-                    return jsonify({"error": "Email and password are required"}), 400
-                else:
-                    if code == 500:
-                        return jsonify({"error": "Database error"}), 500
+        response, code = authentication_service.login(email, password)
+        return jsonify(response), 200
+
 
 
         # if not email or not password:
