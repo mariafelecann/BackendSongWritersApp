@@ -68,7 +68,7 @@ from werkzeug.local import LocalProxy
 from flask import current_app, g
 from sqlalchemy import create_engine, Boolean
 from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, Integer, String
 from werkzeug.local import LocalProxy
 
@@ -104,22 +104,37 @@ class DatabaseSingleton:
 
         return cls._instance
 
+    # def init_app(self, app):
+    #     if self.engine is None:
+    #         DATABASE_URL = app.config.get("URI")
+    #         if not DATABASE_URL:
+    #             print("SUPABASE_URI not configured")
+    #             return
+    #
+    #         try:
+    #             self.engine = create_engine(DATABASE_URL)
+    #             Base.metadata.create_all(self.engine)
+    #             self.Session = scoped_session(sessionmaker(bind=self.engine))
+    #
+    #             print("Successfully connected to Supabase!")
+    #
+    #         except Exception as e:
+    #             print(f"Error connecting to Supabase: {e}")
+
     def init_app(self, app):
         if self.engine is None:
             DATABASE_URL = app.config.get("URI")
             if not DATABASE_URL:
-                print("SUPABASE_URI not configured")
+                print("Database URI not configured")
                 return
 
             try:
-                self.engine = create_engine(DATABASE_URL)
+                self.engine = create_engine(DATABASE_URL, echo=False)
                 Base.metadata.create_all(self.engine)
                 self.Session = scoped_session(sessionmaker(bind=self.engine))
-
-                print("Successfully connected to Supabase!")
-
+                print(f"Connected to DB at: {DATABASE_URL}")
             except Exception as e:
-                print(f"Error connecting to Supabase: {e}")
+                print(f"Error connecting to DB: {e}")
 
     def get_session(self):
         if self.Session is None:

@@ -63,7 +63,7 @@ def register():
 
         # if not email or not password :
         #     return jsonify({"error": "Email, password, and username are required"}), 400
-        #
+
         # if db.query(User).filter_by(email=email).first():
         #     return jsonify({"error": "Email already registered"}), 409
         #
@@ -115,3 +115,27 @@ def logout():
     except Exception as e:
         db.rollback()
         return jsonify({"error": "Logout failed", "details": str(e)}), 500
+
+
+@auth_bp.route("/delete_account", methods=["POST"])
+def delete_account():
+    try:
+        data = request.get_json()
+        email = data.get("email")
+        password = data.get("password")
+
+        code = authentication_service.delete_account(email, password)
+
+        if code == 200:
+            return jsonify({"messag": "Account successfully deleted"}), 200
+        elif code == 400:
+            return jsonify({"error": "Email and password are required"}), 400
+        elif code == 404:
+            return jsonify({"error": "User not found"}), 404
+        elif code == 401:
+            return jsonify({"error": "Invalid password"}), 401
+        else:
+            return jsonify({"error": "Database error"}), 500
+
+    except Exception as e:
+        return jsonify({"error": "Error while deleting account", "details": str(e)}), 500

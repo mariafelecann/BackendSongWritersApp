@@ -90,3 +90,26 @@ class AuthenticationService:
             self.db.rollback()
             current_app.logger.error(e)
             return 500
+
+    def delete_account(self, email, password):
+        try:
+            if not email or not password:
+                return 400
+
+            self.db = get_db()
+            user = self.db.query(self.User).filter_by(email=email).first()
+
+            if not user:
+                return 404
+
+            if not check_password_hash(user.password, password):
+                return 401
+
+            self.db.delete(user)
+            self.db.commit()
+
+            return 200
+        except Exception as e:
+            self.db.rollback()
+            print(e)
+            return 500
