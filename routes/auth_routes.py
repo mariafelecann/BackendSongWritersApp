@@ -7,7 +7,7 @@ from services.authentication_service import AuthenticationService
 
 auth_bp = Blueprint("auth", __name__)
 
-authentication_service = AuthenticationService(User)
+authentication_service = AuthenticationService(User, Song)
 @auth_bp.route("/login", methods=["POST"])
 def login():
     try:
@@ -16,7 +16,7 @@ def login():
         password = data.get("password")
 
         response, code = authentication_service.login(email, password)
-        return jsonify(response), 200
+        return jsonify(response), code
 
 
 

@@ -9,9 +9,10 @@ from database.database import get_db
 
 
 class AuthenticationService:
-    def __init__(self, User):
+    def __init__(self, User, Song):
         self.db = None
         self.User = User
+        self.Song = Song
 
     def register(self, email, password):
         try:
@@ -104,7 +105,7 @@ class AuthenticationService:
 
             if not check_password_hash(user.password, password):
                 return 401
-
+            self.db.query(self.Song).filter_by(email=email).delete()
             self.db.delete(user)
             self.db.commit()
 
