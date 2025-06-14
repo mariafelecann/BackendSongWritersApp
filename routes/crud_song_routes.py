@@ -35,23 +35,23 @@ def delete_song():
     code = crud_service.delete_song(title, email)
     match code:
         case 200:
-            return jsonify({"message":"Song deleted successfully"}), 200
+            return jsonify({"message":"song deleted successfully"}), 200
         case 400:
-            return jsonify({"error":"Title and email are required"}), 400
+            return jsonify({"error":"title and email are required"}), 400
         case 404:
-            return jsonify({"error":"Song not found"}), 404
+            return jsonify({"error":"song not found"}), 404
         case 500:
-            return jsonify({"error":"Database error"}), 500
+            return jsonify({"error":"database error"}), 500
 
 @crud_bp.route("/songs", methods=["GET"])
 def get_songs():
     try:
         email = request.args.get("email")
         if not email:
-            return jsonify({"error": "Email is required"}), 400
+            return jsonify({"error": "email is required"}), 400
         code, songs_list = crud_service.get_all_songs(email)
         if code == 200:
             return jsonify(songs_list), 200
     except Exception as e:
         current_app.logger.error(e)
-        return jsonify({"error": "Database error"}), 500
+        return jsonify({"error": "database error"}), 500

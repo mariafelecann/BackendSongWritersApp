@@ -9,12 +9,7 @@ class LyricsPreprocessingPipeline:
         return self
 
     def run(self, lyrics):
-        """Executes all steps in order"""
         data_dict = {"lyrics": [lyrics]}
-        # data = pd.DataFrame(data = data_dict)
-        # for step in self.steps:
-        #     data = step.process(data)
-        # return data
         data = pd.DataFrame(data=data_dict)
         results = [data]
         repetition_score = None

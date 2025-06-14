@@ -16,7 +16,7 @@ def test_register_duplicate_email(client):
         "password": "securepassword"
     })
     assert response.status_code == 409
-    assert "Email already registered" in response.get_json()["error"]
+    assert "email already registered" in response.get_json()["error"]
 
 def test_login_success(client):
     client.post("/auth/register", json={
@@ -59,4 +59,4 @@ def test_delete_account_success(client):
         "password": "deletepass"
     })
     assert response.status_code == 200
-    assert "Account successfully deleted" in response.get_json()["messag"]
+    assert "account successfully deleted" in response.get_json()["messag"]

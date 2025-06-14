@@ -38,7 +38,6 @@ def analizeaza_sentiment_melodie(text, lexicon_cuvinte, lexicon_expresii):
 
     numar_total_cuvinte_semnificative = len(cuvinte_pozitive) + len(cuvinte_negative)
 
-    # Scorul final va fi între -1 (complet negativ) și 1 (complet pozitiv)
     if numar_total_cuvinte_semnificative == 0:
         scor_normalizat = 0
     else:
@@ -58,13 +57,13 @@ def load_roemolex_dual(cale_fisier1, cale_fisier2):
         try:
             df = pd.read_csv(cale_fisier, sep=';', encoding='utf-8')
             if 'word' not in df.columns or 'Pozitivitate' not in df.columns or 'Negativitate' not in df.columns:
-                print(f"Fișierul {cale_fisier} nu conține coloanele necesare.")
+                print(f"file {cale_fisier} does not contain the necessary column.")
                 return None
 
             df = df[['word', 'Pozitivitate', 'Negativitate']]
 
         except Exception as e:
-            print(f"Eroare la citirea fișierului {cale_fisier}: {e}")
+            print(f"error in reading file {cale_fisier}: {e}")
             return None
 
         lex_cuv = {}
@@ -78,7 +77,7 @@ def load_roemolex_dual(cale_fisier1, cale_fisier2):
                 val_negativ = pd.to_numeric(row['Negativitate'], errors='coerce')
 
                 if pd.isna(val_pozitiv) or pd.isna(val_negativ):
-                    print(f"Atenție: Valoare non-numerică în rândul {index} din {cale_fisier}. Se săre peste rând.")
+                    print(f"non-numeric value at {index}")
                     continue
 
                 if val_pozitiv == 1:
@@ -87,7 +86,7 @@ def load_roemolex_dual(cale_fisier1, cale_fisier2):
                     scor = -1
 
             except ValueError:
-                print(f"Eroare neașteptată la conversia valorilor numerice în rândul {index} din {cale_fisier}. Se săre peste rând.")
+                print("error in converting numeric values.")
                 continue
 
             if scor == 0:
@@ -105,7 +104,7 @@ def load_roemolex_dual(cale_fisier1, cale_fisier2):
     lex_cuv2, lex_expr2 = load_single_file(cale_fisier2)
 
     if lex_cuv1 is None or lex_cuv2 is None:
-        print("Eroare la încărcarea unuia din fișiere.")
+        print("error in loading one of the files.")
         return None, None
 
     lexicon_cuvinte = {**lex_cuv1, **lex_cuv2}

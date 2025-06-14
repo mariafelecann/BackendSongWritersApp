@@ -3,7 +3,6 @@ from collections import Counter
 import pandas as pd
 class ComputeRepetitionScoreStep(PipelineStep):
     def process(self, data):
-        """Computes how repetitive the lyrics are"""
         words = data["lyrics"].iloc[0].split()
         total_words = len(words)
         word_counts = Counter(words)

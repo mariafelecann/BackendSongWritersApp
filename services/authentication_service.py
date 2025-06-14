@@ -41,15 +41,15 @@ class AuthenticationService:
     def login(self, email, password):
         try:
             if not email or not password:
-                return {"error": "Email and password are required"}, 400
+                return {"error": "email and password are required"}, 400
             self.db = get_db()
             user = self.db.query(self.User).filter_by(email=email).first()
 
             if not user:
-                return {"error": "Invalid email"}, 401
+                return {"error": "invalid email"}, 401
 
             if not check_password_hash(user.password, password):
-                return {"error": "Invalid password"}, 401
+                return {"error": "invalid password"}, 401
 
             self.db.execute(update(self.User).where(self.User.email == email).values(logged_in=True))
             self.db.commit()
@@ -69,7 +69,7 @@ class AuthenticationService:
         except Exception as e:
             self.db.rollback()
             current_app.logger.error(e)
-            return {"error": "Database error"}, 500
+            return {"error": "database error"}, 500
 
     def logout(self, email):
         try:

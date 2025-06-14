@@ -3,7 +3,6 @@ from sklearn.preprocessing import StandardScaler
 import pandas as pd
 class ComputeWordCountStep(PipelineStep):
     def process(self, data):
-        """Counts the number of words in the lyrics"""
         words = data["lyrics"].iloc[0].split()
         word_count = len(words)
         scaler = StandardScaler()

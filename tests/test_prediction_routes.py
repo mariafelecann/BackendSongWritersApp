@@ -7,7 +7,7 @@ def test_predict_success(client):
         mock_service.predict.return_value = json.dumps({
             "prediction": ["Pop"],
             "class_labels": ["Pop", "Rock"],
-            "sentiment": {"label": "Positive 😊", "confidence": 0.95},
+            "sentiment": {"label": "Pozitiv 😊", "confidence": 0.95},
             "decision_function": [0.75]
         })
 

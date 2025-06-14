@@ -16,5 +16,5 @@ def client():
         with app.app_context():
             Base.metadata.create_all(engine)
 
-            yield client  # Run the test
-            Base.metadata.drop_all(engine)  # Clean up
+            yield client
+            Base.metadata.drop_all(engine)

@@ -8,7 +8,6 @@ class CleanTextStep(PipelineStep):
         self.stopwords = self.nlp.Defaults.stop_words
 
     def process(self, data):
-        """Removes punctuation, converts text to lowercase, removes stop words and lemmatizes"""
         lyrics = data["lyrics"].iloc[0]
         lyrics = re.sub(r'[^a-zăâîșțA-ZĂÂÎȘȚ \n]', '', lyrics).lower()
         lyrics = re.sub(r"\[.*?\]|\(bis\s*x\d+\)", "", lyrics)

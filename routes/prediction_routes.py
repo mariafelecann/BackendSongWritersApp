@@ -16,6 +16,6 @@ def predict():
         if prediction is not None:
             return jsonify({"genre": prediction}), 200
         else:
-            return jsonify({"error": "Error while predicting the song's genre"}), 500
+            return jsonify({"error": "error while predicting the song's genre"}), 500
     except Exception as e:
-        return jsonify({"error": "Error while predicting the song's genre", "details": str(e)}), 500
+        return jsonify({"error": "error while predicting the song's genre", "details": str(e)}), 500

@@ -53,4 +53,4 @@ class SongCrudOperationsService:
         except Exception as e:
             db.rollback()
             current_app.logger.error(e)
-            return 500, {"Database error"}
+            return 500, {"database error"}
